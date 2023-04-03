@@ -39,6 +39,7 @@ runs:
         DAGSTER_ACTION_REF: ${{ github.repository != 'dagster-io/dagster-cloud-action' && github.action_ref || github.head_ref }}
 
     - name: Notify build start
+      if: ${{ github.event.type == 'PullRequestEvent'}}
       uses: ./action-repo/actions/utils/notify
       with:
         organization_id: ${{ inputs.organization_id }}
