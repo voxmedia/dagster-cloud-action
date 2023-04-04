@@ -76,6 +76,7 @@ runs:
         pr_status: "${{ github.event.pull_request.merged && 'merged' || github.event.pull_request.state || 'open' }}"
         branch_name: "${{ github.event.inputs.branchName || github.head_ref }}"
         repository: "${{ github.event.inputs.repository || github.repository }}"
+        commit_hash: "${{ github.event.inputs.commitHash || github.sha }}"
         location: ${{ inputs.location }}
         image_tag: ${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
       env:
