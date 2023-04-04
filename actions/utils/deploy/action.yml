@@ -45,7 +45,7 @@ outputs:
     description: "The Cloud deployment associated with this branch."
 runs:
   using: "docker"
-  image: "us-east1-docker.pkg.dev/nymag-analytics-157315/dagster-deploy-action/deploy-action:latest"
+  image: "docker://ghcr.io/voxmedia/dagster-cloud-action:latest"
 #  image: "docker://ghcr.io/dagster-io/dagster-cloud-action:0.1.23"
   entrypoint: "/deploy.sh"
   args:

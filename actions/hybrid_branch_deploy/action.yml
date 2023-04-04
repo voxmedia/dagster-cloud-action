@@ -67,15 +67,6 @@ runs:
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
-    # GAR
-    # https://github.com/docker/login-action#service-account-based-authentication-1
-    - name: Login to GAR
-      uses: docker/login-action@v2
-      with:
-        registry: us-east1-docker.pkg.dev
-        username: _json_key
-        password: ${{ secrets.GAR_JSON_KEY }}
-
     - name: Deploy to Dagster Cloud
       uses: ./action-repo/actions/utils/deploy
       id: deploy
