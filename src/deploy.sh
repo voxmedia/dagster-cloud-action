@@ -83,6 +83,9 @@ if [ -z $INPUT_DEPLOYMENT ]; then
             --commit-message "$MESSAGE" \
             --author-name "$NAME" \
             --author-email "$EMAIL")
+        echo "Deployment name: $DEPLOYMENT_NAME"
+        echo "Branch name: $BRANCH_NAME"
+        echo "Branch URL: $BRANCH_URL"
     else
         export DEPLOYMENT_NAME=$(dagster-cloud branch-deployment create-or-update \
             --url "${DAGSTER_CLOUD_URL}" \
