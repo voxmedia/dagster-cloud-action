@@ -41,7 +41,7 @@ inputs:
     required: true
     description: "The image tag to deploy."
 outputs:
-  deployment:s
+  deployment:
     description: "The Cloud deployment associated with this branch."
 runs:
   using: "docker"
