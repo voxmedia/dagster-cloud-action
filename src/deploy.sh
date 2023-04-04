@@ -15,11 +15,11 @@ if [ ! -z $GITHUB_ACTIONS ]; then
   BRANCH_URL="${GITHUB_SERVER_URL}/${REPOSITORY}/tree/${BRANCH_NAME}"
   CI_RUN_NUMBER="$GITHUB_RUN_NUMBER"
   COMMIT_HASH="$GITHUB_SHA"
-  COMMIT_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/tree/${GITHUB_SHA}"
+  COMMIT_URL="${GITHUB_SERVER_URL}/${REPOSITORY}/tree/${GITHUB_SHA}"
   GIT_REPO="$GITHUB_REPOSITORY"
   PR_ID="$INPUT_PR"
   PR_STATUS=`echo $INPUT_PR_STATUS | tr '[a-z]' '[A-Z]'`
-  PR_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/pull/${INPUT_PR}"
+  PR_URL="${GITHUB_SERVER_URL}/${REPOSITORY}/pull/${INPUT_PR}"
 elif [ ! -z $GITLAB_CI ]; then
   #AVATAR_URL="TODO"
   BRANCH_NAME="$CI_COMMIT_BRANCH"
@@ -72,7 +72,7 @@ if [ -z $INPUT_DEPLOYMENT ]; then
         export DEPLOYMENT_NAME=$(dagster-cloud branch-deployment create-or-update \
             --url "${DAGSTER_CLOUD_URL}" \
             --api-token "$DAGSTER_CLOUD_API_TOKEN" \
-            --git-repo-name "$GIT_REPO" \
+            --git-repo-name "$REPOSITORY" \
             --branch-name "$BRANCH_NAME" \
             --branch-url "$BRANCH_URL" \
             --pull-request-url "$PR_URL" \
