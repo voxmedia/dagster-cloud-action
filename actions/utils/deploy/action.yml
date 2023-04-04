@@ -41,11 +41,11 @@ inputs:
     required: true
     description: "The image tag to deploy."
 outputs:
-  deployment:
+  deployment:s
     description: "The Cloud deployment associated with this branch."
 runs:
   using: "docker"
-  image: "Dockerfile"
+  image: "us-east1-docker.pkg.dev/nymag-analytics-157315/dagster-deploy-action/deploy-action:latest"
 #  image: "docker://ghcr.io/dagster-io/dagster-cloud-action:0.1.23"
   entrypoint: "/deploy.sh"
   args:
