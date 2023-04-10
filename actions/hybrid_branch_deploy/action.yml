@@ -27,7 +27,7 @@ runs:
     - name: Checkout action repo
       uses: actions/checkout@v3
       with:
-        repository: dagster-io/dagster-cloud-action
+        repository: voxmedia/dagster-cloud-action
         ref: ${{ env.DAGSTER_ACTION_REF }}
         path: ./action-repo/
       env:
@@ -39,6 +39,7 @@ runs:
         DAGSTER_ACTION_REF: ${{ github.repository != 'dagster-io/dagster-cloud-action' && github.action_ref || github.head_ref }}
 
     - name: Notify build start
+      if: ${{ github.event.type == 'PullRequestEvent'}}
       uses: ./action-repo/actions/utils/notify
       with:
         organization_id: ${{ inputs.organization_id }}
@@ -71,8 +72,11 @@ runs:
       id: deploy
       with:
         organization_id: ${{ inputs.organization_id }}
-        pr: "${{ github.event.number }}"
-        pr_status: "${{ github.event.pull_request.merged && 'merged' || github.event.pull_request.state }}"
+        pr: "${{ github.event.number || github.event.inputs.prNumber }}"
+        pr_status: "${{ github.event.pull_request.merged && 'merged' || github.event.pull_request.state || 'open' }}"
+        branch_name: "${{ github.event.inputs.branchName || github.head_ref }}"
+        repository: "${{ github.event.inputs.repository || github.repository }}"
+        commit_hash: "${{ github.event.inputs.commitHash || github.sha }}"
         location: ${{ inputs.location }}
         image_tag: ${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
       env:
@@ -80,6 +84,7 @@ runs:
 
     # Optional steps, leaves PR comment about build status
     - name: Notify build success
+      if: ${{ github.event.type == 'PullRequestEvent' }}
       uses: ./action-repo/actions/utils/notify
       with:
         organization_id: ${{ inputs.organization_id }}
@@ -91,7 +96,7 @@ runs:
         GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
 
     - name: Notify build failure
-      if: ${{ failure() }}
+      if: ${{ failure() && github.event.type == 'PullRequestEvent' }}
       uses: ./action-repo/actions/utils/notify
       with:
         organization_id: ${{ inputs.organization_id }}

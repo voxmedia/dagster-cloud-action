@@ -17,6 +17,15 @@ inputs:
   pr_status:
     required: false
     description: 'The status for this PR, one of "merged", "closed" or "open".'
+  branch_name:
+    required: false
+    description: "The branch name for this PR, if any, used for branch deployments."
+  repository:
+    required: false
+    description: "The repository in which the PR is, if any, used for branch deployments."
+  commit_hash:
+    required: false
+    description: "The commit hash for this PR, if any, used for branch deployments."
 
   location:
     required: true
@@ -39,7 +48,10 @@ outputs:
     description: "The Cloud deployment associated with this branch."
 runs:
   using: "docker"
-  image: "docker://ghcr.io/dagster-io/dagster-cloud-action:0.1.23"
+  image: "docker://ghcr.io/nymag/dagster-cloud-action:latest"
+#  image: "docker://ghcr.io/dagster-io/dagster-cloud-action:0.1.23"
   entrypoint: "/deploy.sh"
   args:
     - ${{ inputs.pr }}
+    - ${{ inputs.branch_name }}
+    - ${{ inputs.repository }}

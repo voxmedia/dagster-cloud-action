@@ -10,15 +10,16 @@ source $(python /expand_json_env.py)
 # AVATAR_URL BRANCH_NAME BRANCH_URL CI_RUN_NUMBER COMMIT_HASH COMMIT_URL GIT_REPO PR_ID PR_STATUS PR_URL
 if [ ! -z $GITHUB_ACTIONS ]; then
   AVATAR_URL=$(python /fetch_github_avatar.py)
-  BRANCH_NAME="$GITHUB_HEAD_REF"
-  BRANCH_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/tree/${GITHUB_HEAD_REF}"
+  BRANCH_NAME="$INPUT_BRANCH_NAME" || "$GITHUB_HEAD_REF"
+  REPOSITORY="$INPUT_REPOSITORY" || "$GITHUB_REPOSITORY"
+  BRANCH_URL="${GITHUB_SERVER_URL}/${REPOSITORY}/tree/${BRANCH_NAME}"
   CI_RUN_NUMBER="$GITHUB_RUN_NUMBER"
-  COMMIT_HASH="$GITHUB_SHA"
-  COMMIT_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/tree/${GITHUB_SHA}"
+  COMMIT_HASH="$INPUT_COMMIT_HASH" || "$GITHUB_SHA"
+  COMMIT_URL="${GITHUB_SERVER_URL}/${REPOSITORY}/tree/${GITHUB_SHA}"
   GIT_REPO="$GITHUB_REPOSITORY"
   PR_ID="$INPUT_PR"
   PR_STATUS=`echo $INPUT_PR_STATUS | tr '[a-z]' '[A-Z]'`
-  PR_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/pull/${INPUT_PR}"
+  PR_URL="${GITHUB_SERVER_URL}/${REPOSITORY}/pull/${INPUT_PR}"
 elif [ ! -z $GITLAB_CI ]; then
   #AVATAR_URL="TODO"
   BRANCH_NAME="$CI_COMMIT_BRANCH"
@@ -71,7 +72,7 @@ if [ -z $INPUT_DEPLOYMENT ]; then
         export DEPLOYMENT_NAME=$(dagster-cloud branch-deployment create-or-update \
             --url "${DAGSTER_CLOUD_URL}" \
             --api-token "$DAGSTER_CLOUD_API_TOKEN" \
-            --git-repo-name "$GIT_REPO" \
+            --git-repo-name "$REPOSITORY" \
             --branch-name "$BRANCH_NAME" \
             --branch-url "$BRANCH_URL" \
             --pull-request-url "$PR_URL" \
@@ -82,6 +83,9 @@ if [ -z $INPUT_DEPLOYMENT ]; then
             --commit-message "$MESSAGE" \
             --author-name "$NAME" \
             --author-email "$EMAIL")
+        echo "Deployment name: $DEPLOYMENT_NAME"
+        echo "Branch name: $BRANCH_NAME"
+        echo "Branch URL: $BRANCH_URL"
     else
         export DEPLOYMENT_NAME=$(dagster-cloud branch-deployment create-or-update \
             --url "${DAGSTER_CLOUD_URL}" \
