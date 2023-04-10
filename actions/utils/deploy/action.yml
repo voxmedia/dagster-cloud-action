@@ -23,6 +23,9 @@ inputs:
   repository:
     required: false
     description: "The repository in which the PR is, if any, used for branch deployments."
+  commit_hash:
+    required: false
+    description: "The commit hash for this PR, if any, used for branch deployments."
 
   location:
     required: true
