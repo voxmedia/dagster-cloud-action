@@ -28,6 +28,7 @@ runs:
       uses: actions/checkout@v3
       with:
         ref: ${{ github.sha }}
+        clean: false
 
     - name: Checkout action repo
       uses: actions/checkout@v3
