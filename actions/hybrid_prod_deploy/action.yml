@@ -7,6 +7,9 @@ inputs:
   dagster_cloud_api_token:
     description: "Dagster Cloud API token"
     required: true
+  metronome_pat:
+    required: false
+    description: "A GitHub personal access token with the `repo` scope to use for metronome"
   location:
     required: true
     description: 'The code location to deploy. A JSON string consisting of keys "name", "directory", "registry", "location_file".'
@@ -58,6 +61,8 @@ runs:
           branch=${{ github.head_ref }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
+      env:
+        METRONOME_PAT: ${{ inputs.metronome_pat }}
 
     - name: Deploy to Dagster Cloud
       uses: ./action-repo/actions/utils/deploy
