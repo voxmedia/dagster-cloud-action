@@ -69,8 +69,8 @@ runs:
           branch=${{ github.head_ref }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
-      env:
-        METRONOME_ACCESS_TOKEN: ${{ inputs.metronome_access_token }}
+        secrets: |
+          "METRONOME_ACCESS_TOKEN=${{ inputs.metronome_access_token }}"
 
     - name: Deploy to Dagster Cloud
       uses: ./action-repo/actions/utils/deploy
